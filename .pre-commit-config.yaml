@@ -1,0 +1,35 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: debug-statements
+      - id: mixed-line-ending
+      - id: check-ast
+      - id: check-yaml
+
+  - repo: local
+    hooks:
+      - id: isort
+        name: "Sort imports"
+        language: system
+        types: [file, python]
+        entry: isort
+      - id: black
+        name: "Black formatting"
+        language: system
+        types: [file, python]
+        entry: "black"
+        args: [--safe, "--line-length=79"]
+      - id: flake8
+        name: "Flake8 linting"
+        language: system
+        types: [file, python]
+        entry: flake8
+
+  - repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5
+    hooks:
+      - id: clang-format
+        args: [--style=Google, -i]
