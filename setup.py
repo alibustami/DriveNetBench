@@ -1,3 +1,5 @@
+"""Package setup file."""
+
 import os
 
 from setuptools import find_packages, setup
@@ -6,7 +8,7 @@ with open("requirements.txt") as f:
     REQUIREMENTS = f.read().splitlines()
 
 setup(
-    name="Drive Net Bench",
+    name="DriveNetBench",
     version="0.1",
     packages=find_packages(include=["drivenetbench", "drivenetbench.*"]),
     install_requires=REQUIREMENTS,
