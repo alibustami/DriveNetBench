@@ -1,0 +1,4 @@
+digital_design_path: "assets/track.jpg"
+keypoints_npy_path_source: "keypoints/pos3_keypoints_from_camera.npy"
+keypoints_npy_path_target: "keypoints/old_keypoints_from_digital.npy"
+detection_model_path: "weights/best.pt"

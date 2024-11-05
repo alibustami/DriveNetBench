@@ -3,3 +3,8 @@ isort
 black
 flake8
 typer
+opencv-python
+tk-tools
+Pillow
+supervision
+ultralytics
