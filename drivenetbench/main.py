@@ -54,12 +54,16 @@ output_frame_size = (
     int(cap_height),
 )  # (height, width)
 
+SHIFT_RATIO = 0.0275
+
 video_writer = cv2.VideoWriter(
-    os.path.join("assets", "pos3_output.mp4"),
+    os.path.join("assets", f"pos3_output_shifted_{SHIFT_RATIO}.mp4"),
     cv2.VideoWriter_fourcc(*"mp4v"),
     cap_fps,
     output_frame_size,
 )
+
+
 while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
@@ -84,6 +88,9 @@ while cap.isOpened():
                 frame, [points], isClosed=True, color=(0, 255, 0), thickness=2
             )
             polylines_centoid = np.mean(points, axis=0)
+            y_dif = frame.shape[0] - polylines_centoid[1]
+            shift = int(y_dif * SHIFT_RATIO)
+            polylines_centoid[1] += shift
             cv2.circle(
                 frame,
                 tuple(polylines_centoid.astype(int)),
