@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 from typing import List, Tuple, Union
 
+import cv2
 import numpy as np
 import numpy.typing as npt
 import supervision as sv
@@ -96,3 +97,45 @@ def load_and_preprocess_points(points_path: Path) -> sv.KeyPoints:
     points = points[np.newaxis, ...]
     points = sv.KeyPoints(points)
     return points
+
+
+def view_points(points_path: Path, image_path: Path) -> np.ndarray:
+    """View the points on the image.
+
+    Parameters
+    ----------
+    points_path : Path
+        The path to the points file.
+    image_path : Path
+        The path to the image file.
+
+    Returns
+    -------
+    np.ndarray
+        The image with the points.
+    """
+    points = np.load(points_path)
+
+    image = cv2.imread(image_path)
+    for i, point in enumerate(points):
+        x, y = point
+        cv2.circle(image, (int(x), int(y)), 5, (255, 0, 0), -1)
+        cv2.putText(
+            image,
+            str(i),
+            (int(x), int(y)),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            5,
+            (0, 0, 255),
+            2,
+        )
+    return image
+
+
+if __name__ == "__main__":
+    points_path = Path("keypoints/new_track/keypoints_from_diagram.npy")
+    image_path = Path("assets/new_track/track-v2.jpg")
+    image = view_points(points_path, image_path)
+    cv2.imshow("Image", image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
