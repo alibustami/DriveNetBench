@@ -112,6 +112,8 @@ def detect_robot_path(
                     dtype=np.int32,
                 )
                 centroid = np.mean(points, axis=0)
+                if centroid[0] > 2700 and centroid[1] < 100:
+                    continue
 
                 # Apply optional "shift" (heuristic)
                 y_diff = frame.shape[0] - centroid[1]
@@ -359,16 +361,19 @@ def benchmark_robot_performance(
     return (full_rotation_time, similarity_percent)
 
 
-###############################################################################
-# Example Usage
-###############################################################################
 if __name__ == "__main__":
-    # Replace with real paths in your environment:
-    VIDEO_PATH = "assets/pos3.mov"
+    # VIDEO_PATH = "assets/pos3.mov"
+    # MODEL_PATH = "weights/best.pt"
+    # SOURCE_KPTS = "keypoints/pos3_keypoints_from_camera.npy"
+    # TARGET_KPTS = "keypoints/old_keypoints_from_digital.npy"
+    # REF_PATH = "keypoints/all_path.npy"  # from track_processor.py
+    # OUTPUT_VIDEO = "assets/benchmark_output.mp4"
+
+    VIDEO_PATH = "assets/new_track/driver_4.mov"
     MODEL_PATH = "weights/best.pt"
-    SOURCE_KPTS = "keypoints/pos3_keypoints_from_camera.npy"
-    TARGET_KPTS = "keypoints/old_keypoints_from_digital.npy"
-    REF_PATH = "keypoints/all_path.npy"  # from track_processor.py
+    SOURCE_KPTS = "keypoints/new_track/keypoints_from_camera.npy"
+    TARGET_KPTS = "keypoints/new_track/keypoints_from_diagram.npy"
+    REF_PATH = "keypoints/center_path.npy"  # from track_processor.py
     OUTPUT_VIDEO = "assets/benchmark_output.mp4"
 
     rotation_time, sim_score = benchmark_robot_performance(
@@ -379,7 +384,7 @@ if __name__ == "__main__":
         reference_track_npy_path=REF_PATH,
         output_video_path=OUTPUT_VIDEO,
         confidence_threshold=0.85,
-        shift_ratio=0.0275,
+        shift_ratio=0.0075,
         path_similarity_method="dtw",
         show_live=True,  # <-- Enable live visualization
     )
