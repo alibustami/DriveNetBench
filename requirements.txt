@@ -9,3 +9,4 @@ tk-tools
 Pillow
 supervision
 ultralytics
+scikit-learn
