@@ -5,6 +5,7 @@ from typing import Optional
 
 from typer import Typer
 
+from drivenetbench.benchmarker import BenchMarker
 from drivenetbench.geometry_definer import GeometryDefiner
 from drivenetbench.utilities.config import get_config
 from drivenetbench.utilities.utils import path_checker, path_fixer
@@ -36,9 +37,10 @@ def define_polygon(
 
 
 @app.command()
-def test():
-    """Test DriveNetBench."""
-    print("Testing DriveNetBench.")
+def benchmark(config_file_path: str):
+    """Benchmark the DriveNetBench."""
+    bench_marker = BenchMarker(config_file_path)
+    bench_marker.run()
 
 
 if __name__ == "__main__":
