@@ -1,28 +1,31 @@
 import logging
+from ast import literal_eval
+from typing import Optional
 
 import cv2
 import numpy as np
 from sklearn.cluster import DBSCAN
+
+import drivenetbench.utilities.config as configs
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
 class TrackProcessor:
-    """
-    A class to process a track image in order to extract either:
-      - All center lines (via skeletonization), OR
-      - The single offset center path of the outer boundary (via erosion),
-      THEN cluster the resulting points to remove noise.
+    """A class to process a track image in order to extract either:
+    - All center lines (via skeletonization), OR
+    - The single offset center path of the outer boundary (via erosion),
+    THEN cluster the resulting points to remove noise.
     """
 
     def __init__(
         self,
-        image_path: str,
-        color_hsv: tuple,
-        output_image_path: str,
-        output_npy_path: str,
-        only_offset_outer: bool = False,
+        image_path: Optional[str] = None,
+        color_hsv: Optional[tuple] = None,
+        output_image_path: Optional[str] = None,
+        output_npy_path: Optional[str] = None,
+        only_offset_outer: Optional[bool] = None,
     ):
         """
         Parameters
@@ -40,11 +43,32 @@ class TrackProcessor:
             If False, skeletonize the entire track to get all center lines.
             If True, offset just the largest outer boundary to find its center path.
         """
-        self.image_path = image_path
-        self.color_hsv_picker = color_hsv  # e.g. (330, 23, 84)
-        self.output_image_path = output_image_path
-        self.output_npy_path = output_npy_path
-        self.only_offset_outer = only_offset_outer
+        self.image_path = (
+            image_path
+            if image_path is not None
+            else configs.get_config("track_processor.image_path")
+        )
+        self.color_hsv_picker = (
+            color_hsv
+            if color_hsv is not None
+            else configs.get_config("track_processor.color_hsv")
+        )  # e.g. (330, 23, 84)
+        self.color_hsv_picker = literal_eval(self.color_hsv_picker)
+        self.output_image_path = (
+            output_image_path
+            if output_image_path is not None
+            else configs.get_config("track_processor.output_image_path_export")
+        )
+        self.output_npy_path = (
+            output_npy_path
+            if output_npy_path is not None
+            else configs.get_config("track_processor.output_npy_path_export")
+        )
+        self.only_offset_outer = (
+            only_offset_outer
+            if only_offset_outer is not None
+            else configs.get_config("track_processor.only_offset_the_outer")
+        )
 
     @staticmethod
     def _skeletonize_binary_mask(binary_mask: np.ndarray) -> np.ndarray:
@@ -253,11 +277,16 @@ class TrackProcessor:
             offset_contour = max(offset_contours, key=cv2.contourArea)
             center_line_xy = offset_contour.reshape(-1, 2)
 
+        eps = configs.get_config("track_processor.dbscan.eps")
+        min_samples = configs.get_config("track_processor.dbscan.min_samples")
+        cluster_size_threshold = configs.get_config(
+            "track_processor.dbscan.cluster_size_threshold"
+        )
         center_line_xy = self._cluster_and_filter(
             center_line_xy,
-            eps=5.0,
-            min_samples=5,
-            cluster_size_threshold=30,
+            eps=eps,
+            min_samples=min_samples,
+            cluster_size_threshold=cluster_size_threshold,
         )
 
         cv2.drawContours(image, [largest_contour], -1, (0, 255, 0), 2)
@@ -280,13 +309,16 @@ if __name__ == "__main__":
     # We want all skeleton lines, not just the offset.
     # this tool was used: https://pinetools.com/image-color-picker to get the HSV values
 
-    processor = TrackProcessor(
-        image_path="assets/new_track/track-v2.jpg",
-        color_hsv=(330, 23, 84),  # (H,S,V) in [0..360,0..100,0..100]
-        output_image_path="assets/annotated.png",
-        output_npy_path="keypoints/new_track/all_path.npy",
-        only_offset_outer=False,
-    )
-    outer_points, center_points = processor.process()
-    print(f"Outer contour has {len(outer_points)} points.")
-    print(f"Center path has {len(center_points)} points.")
+    # processor = TrackProcessor(
+    #     image_path="assets/new_track/track-v2.jpg",
+    #     color_hsv=(330, 23, 84),  # (H,S,V) in [0..360,0..100,0..100]
+    #     output_image_path="assets/annotated.png",
+    #     output_npy_path="keypoints/new_track/all_path.npy",
+    #     only_offset_outer=False,
+    # )
+    # outer_points, center_points = processor.process()
+    # print(f"Outer contour has {len(outer_points)} points.")
+    # print(f"Center path has {len(center_points)} points.")
+
+    processor = TrackProcessor()
+    processor.process()
