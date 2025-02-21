@@ -11,3 +11,4 @@ Pillow
 supervision
 ultralytics
 scikit-learn
+toml
