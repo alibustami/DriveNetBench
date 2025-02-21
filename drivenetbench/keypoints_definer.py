@@ -1,27 +1,29 @@
 """Utility functions for Easier POC applications."""
 
+import tkinter
 from tkinter import Canvas, Tk
 from typing import Optional
 
 import cv2
 import numpy as np
+import numpy.typing as npt
 from PIL import Image, ImageTk
 
+import drivenetbench.utilities.config as configs
 from drivenetbench.utilities.utils import path_checker
 
 
-class GeometryDefiner:
+class KeyPointsDefiner:
     """Class for defining geometry on a video or image source."""
 
     def __init__(
         self,
-        source: str,
-        output_name: str,
-        polygon: bool = False,
-        frame_num: int = 1,
-        override_if_exists: bool = False,
+        source: Optional[str] = None,
+        output_name: Optional[str] = None,
+        frame_num: Optional[int] = None,
+        override_if_exists: Optional[bool] = False,
     ):
-        """Initialize the GeometryDefiner.
+        """Initialize the KeyPointsDefiner.
 
         Parameters
         ----------
@@ -29,13 +31,32 @@ class GeometryDefiner:
             The source of the video or image.
         output_name : str
             The name of the output numpy file.
-        polygon : bool, optional
-            Whether to draw a polygon (default is False).
         frame_num : int, optional
             The frame number to extract for videos (default is 1).
+        override_if_exists : bool, optional
+            Whether to override the output file if it exists (default is False).
         """
-        self.source = source
-        self.output_name = output_name
+        self.source = (
+            source
+            if source is not None
+            else configs.get_config("geometry_definer.source_path")
+        )
+        self.output_name = (
+            output_name
+            if output_name is not None
+            else configs.get_config("geometry_definer.output_name")
+        )
+        self.frame_num = (
+            frame_num
+            if frame_num is not None
+            else configs.get_config("geometry_definer.frame_number")
+        )
+        self.override_if_exists = (
+            override_if_exists
+            if override_if_exists
+            else configs.get_config("geometry_definer.override_if_exists")
+        )
+
         if path_checker(f"{self.output_name}.npy", break_if_not_found=False)[
             0
         ]:
@@ -45,7 +66,6 @@ class GeometryDefiner:
                     "Use the --override-if-exists flag to override."
                 )
 
-        self.polygon = polygon
         self.frame_num = frame_num
 
         self.window = None
@@ -69,12 +89,12 @@ class GeometryDefiner:
         self.window = Tk()
         self.window.title("Define Geometry")
 
-    def extract_frame(self):
+    def extract_frame(self) -> npt.NDArray:
         """Extract a frame from the source.
 
         Returns
         -------
-        np.ndarray
+        npt.NDArray
             The extracted frame in RGB format.
 
         Raises
@@ -103,12 +123,12 @@ class GeometryDefiner:
         cap.release()
         return frame
 
-    def setup_canvas(self, frame):
+    def setup_canvas(self, frame: npt.NDArray):
         """Set up the Tkinter canvas with the frame.
 
         Parameters
         ----------
-        frame : np.ndarray
+        frame : npt.NDArray
             The frame to display.
         """
         screen_pad = 200
@@ -149,7 +169,7 @@ class GeometryDefiner:
         self.canvas.bind("<Key>", self.on_key_press)
         self.canvas.focus_set()
 
-    def on_click(self, event):
+    def on_click(self, event: tkinter.Event):
         """Handle mouse click events.
 
         Parameters
@@ -161,7 +181,7 @@ class GeometryDefiner:
         self.points.append((x, y))
         self.update_canvas()
 
-    def on_key_press(self, event):
+    def on_key_press(self, event: tkinter.Event):
         """Handle key press events.
 
         Parameters
@@ -196,19 +216,9 @@ class GeometryDefiner:
 
     def update_canvas(self):
         """Update the canvas by redrawing the points and shapes."""
-        self.canvas.delete("polygon")
         self.canvas.delete("points")
 
-        if self.polygon and len(self.points) >= 3:
-            self.canvas.create_polygon(
-                self.points, outline="blue", fill="", width=1, tag="polygon"
-            )
-        elif len(self.points) >= 2:
-            self.canvas.create_line(
-                self.points, fill="blue", width=1, tag="polygon"
-            )
-
-        for point in self.points:
+        for i, point in enumerate(self.points):
             x, y = point
             radius = 3
             self.canvas.create_oval(
@@ -220,19 +230,11 @@ class GeometryDefiner:
                 outline="red",
                 tag="points",
             )
-
-
-if __name__ == "__main__":
-    # Example usage:
-    source = "assets/NN_Diagram.jpg"
-    output_name = "output_points"
-    polygon = False
-    frame_num = 1
-
-    geometry_definer = GeometryDefiner(
-        source=source,
-        output_name=output_name,
-        polygon=polygon,
-        frame_num=frame_num,
-    )
-    geometry_definer.run()
+            # write the point index
+            self.canvas.create_text(
+                x + 10,
+                y + 10,
+                text=str(i + 1),
+                fill="red",
+                tag="points",
+            )
