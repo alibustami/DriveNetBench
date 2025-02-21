@@ -1,11 +1,11 @@
 benchmarker:
-  video_path: ""
+  video_path: "assets/new_track/driver_4.MOV"
   detection_model:
     model_path: "weights/best.pt"
     conf_threshold: 0.85
     shift_ratio: 0.02
-  track_image_path: ""
-  reference_track_npy_path: ""
+  track_image_path: "assets/new_track/track-v2.jpg"
+  reference_track_npy_path: "keypoints/new_track/all_path.npy"
 
   path_similarity:
     method: 'dtw' # dtw, frechet
@@ -21,32 +21,36 @@ benchmarker:
     distance_threshold: 50.0
     skip_seconds: 5.0
 
+  time:
+    distance_threshold_in_pixels: 50.0
+    skip_first_x_seconds: 5.0
+
+
 view_transformer:
-  source_path: ""
-  target_path: ""
+  source_path: "keypoints/new_track/keypoints_from_camera.npy"
+  target_path: "keypoints/new_track/keypoints_from_diagram.npy"
+
 
 geometry_definer:
-  source_path: ""
-  output_path: "" # without .npy
-  polygon: False
+  source_path: "assets/new_track/base.jpg"
+  output_name: "test" # without .npy
   frame_number: 1 # if source is video
   override_if_exists: False
 
 
 track_processor:
-  image_path: ""
-  color_hsv: (0, 0, 0) # use https://pinetools.com/image-color-picker
-  output_image_path: ""
-  output_npy_path: ""
-  only_offset_the_outer: True
+  image_path: "assets/new_track/track-v2.jpg"
+  color_hsv: (330, 23, 84) # use https://pinetools.com/image-color-picker
+  output_image_path_export: "assets/new_track/annotated_track.jpg"
+  output_npy_path_export: "keypoints/new_track/all_track.npy"
+  only_offset_the_outer: False
   dbscan:
     eps: 5.0
-    min_samples: 10
+    min_samples: 5
     cluster_size_threshold: 30
 
 
 actions:
-  early_stop_after_x_frames: None
+  early_stop_after_x_seconds: # leave empty to disable
   show_live: True
-  save_live_to_disk: False
-  live_output_path: "runs/detect/exp"
+  save_live_to_disk: True
