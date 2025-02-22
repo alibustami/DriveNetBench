@@ -14,7 +14,7 @@ from drivenetbench.utilities.utils import (
     path_checker,
     path_fixer,
 )
-from drivenetbench.view_transformer import ViewTransformer
+from drivenetbench.utilities.view_transformer import ViewTransformer
 
 _, MODEL_PATH = path_checker(path_fixer(get_config("detection_model_path")))
 detection_model = YOLO(MODEL_PATH)

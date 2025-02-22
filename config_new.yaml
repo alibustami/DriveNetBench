@@ -1,0 +1,52 @@
+benchmarker:
+  video_path: "assets/new_track/driver_1.MOV"
+  detection_model:
+    model_path: "weights/best.pt"
+    conf_threshold: 0.85
+    shift_ratio: 0.02
+  track_image_path: "assets/new_track/track-v2.jpg"
+  reference_track_npy_path: "keypoints/new_track/all_path.npy"
+
+  path_similarity:
+    method: 'dtw' # dtw, frechet
+
+    # one of these blocks (if `auto_tune` is True, the other block is ignored)
+    auto_tune: True
+    clamp_percentage: 0.05
+    # or
+    clamp_distance: 300.0
+    distance_baseline: 3500.0
+
+  full_rotation_time:
+    distance_threshold: 50.0
+    skip_seconds: 5.0
+
+view_transformer:
+  source_path: ""
+  target_path: ""
+
+geometry_definer:
+  source_path: ""
+  output_path: "" # without .npy
+  polygon: False
+  frame_number: 1 # if source is video
+  override_if_exists: False
+
+
+track_processor:
+  image_path: ""
+  color_hsv: (0, 0, 0) # use https://pinetools.com/image-color-picker
+  output_image_path: ""
+  output_npy_path: ""
+  only_offset_the_outer: True
+  dbscan:
+    eps: 5.0
+    min_samples: 10
+    cluster_size_threshold: 30
+
+
+actions:
+  early_stop_after_x_frames:
+  show_live: True
+  save_live_to_disk: False
+  live_output_path: "runs/detect/exp"

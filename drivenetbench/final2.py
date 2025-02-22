@@ -14,7 +14,7 @@ from drivenetbench.utilities.utils import (
 )
 
 # Import your existing utilities and classes
-from drivenetbench.view_transformer import ViewTransformer
+from drivenetbench.utilities.view_transformer import ViewTransformer
 
 
 def detect_robot_path(
