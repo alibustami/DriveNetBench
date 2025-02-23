@@ -12,9 +12,7 @@ from drivenetbench.utilities.utils import (
     path_checker,
     path_fixer,
 )
-
-# Import your existing utilities and classes
-from drivenetbench.view_transformer import ViewTransformer
+from drivenetbench.utilities.view_transformer import ViewTransformer
 
 
 def detect_robot_path(
