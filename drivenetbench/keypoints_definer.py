@@ -39,22 +39,22 @@ class KeyPointsDefiner:
         self.source = (
             source
             if source is not None
-            else configs.get_config("geometry_definer.source_path")
+            else configs.get_config("keypoints_definer.source_path")
         )
         self.output_name = (
             output_name
             if output_name is not None
-            else configs.get_config("geometry_definer.output_name")
+            else configs.get_config("keypoints_definer.output_name")
         )
         self.frame_num = (
             frame_num
             if frame_num is not None
-            else configs.get_config("geometry_definer.frame_number")
+            else configs.get_config("keypoints_definer.frame_number")
         )
         self.override_if_exists = (
             override_if_exists
             if override_if_exists
-            else configs.get_config("geometry_definer.override_if_exists")
+            else configs.get_config("keypoints_definer.override_if_exists")
         )
 
         if path_checker(f"{self.output_name}.npy", break_if_not_found=False)[

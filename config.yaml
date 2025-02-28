@@ -17,10 +17,6 @@ benchmarker:
     clamp_distance: 300.0
     distance_baseline: 3500.0
 
-  full_rotation_time:
-    distance_threshold: 50.0
-    skip_seconds: 5.0
-
   time:
     distance_threshold_in_pixels: 50.0
     skip_first_x_seconds: 5.0
@@ -31,7 +27,7 @@ view_transformer:
   target_path: "keypoints/new_track/keypoints_from_diagram.npy"
 
 
-geometry_definer:
+keypoints_definer:
   source_path: "assets/new_track/base.jpg"
   output_name: "test" # without .npy
   frame_number: 1 # if source is video
