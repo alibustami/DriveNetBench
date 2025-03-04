@@ -1,5 +1,0 @@
-name: "drivenetbench-env"
-channels:
-  - defaults
-dependencies:
-  - python=3.8
