@@ -33,3 +33,7 @@ def benchmark(config_file_path: Optional[str] = "config.yaml"):
     """Benchmark the DriveNetBench."""
     bench_marker = BenchMarker(config_file_path)
     bench_marker.run()
+
+
+if __name__ == "__main__":
+    app()
