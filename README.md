@@ -3,9 +3,6 @@
 DriveNetBench is a comprehensive benchmarking repository for evaluating neural networks designed for autonomous driving control.
 
 
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/alibustami)
-
-
 ![til](./assets/bench.gif)
 
 ## Project Description
