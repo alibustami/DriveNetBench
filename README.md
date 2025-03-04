@@ -13,6 +13,10 @@ DriveNetBench is a benchmarking tool designed to evaluate the performance of neu
 - Extraction and processing of track images to define keypoints and paths.
 - Visualization of the robot's path and track.
 
+## Requirements
+
+- Miniconda or Anaconda
+
 ## Installation
 
 To install DriveNetBench, follow these steps:
@@ -22,16 +26,20 @@ To install DriveNetBench, follow these steps:
    git clone https://github.com/alibustami/DriveNetBench.git
    cd DriveNetBench
    ```
-
-2. Create and activate a virtual environment:
+### Unix
+2. Create a virtual environment and build the package:
    ```bash
-   conda env create -f environment.yml
-   conda activate drivenetbench-env
+   make create-venv
    ```
 
-3. Install the required dependencies:
-   ```bash
-   pip install -e .
+### Windows
+2. Create a virtual environment and build the package:
+   ```
+   conda create -n drivenetbench python=3.8
+   conda activate drivenetbench
+   python -m pip install --upgrade pip
+   python -m pip install --upgrade setuptools wheel
+   python -m pip install -e .
    pre-commit install
    ```
 
