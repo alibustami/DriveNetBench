@@ -75,31 +75,50 @@ The `config.yaml` file contains the following parameters:
   - `track_processor.dbscan.eps`: The maximum distance between two samples for one to be considered as in the neighborhood of the other.
   - `track_processor.dbscan.min_samples`: The number of samples in a neighborhood for a point to be considered as a core point.
   - `track_processor.dbscan.cluster_size_threshold`: The minimum number of points in a cluster to be considered as a track.
-- General parameters:
-  - `early_stop_after_x_seconds`: The number of seconds to wait before stopping the benchmark, leave empty to disable.
-  - `show_live`: A boolean value indicating whether to show the live video feed.
-  - `save_live_to_disk`: A boolean value indicating whether to save the live video feed to disk.
+- General parameters, `actions` objects:
+  - `actions.early_stop_after_x_seconds`: The number of seconds to wait before stopping the benchmark, leave empty to disable.
+  - `actions.show_live`: A boolean value indicating whether to show the live video feed.
+  - `actions.save_live_to_disk`: A boolean value indicating whether to save the live video feed to disk.
 
 ## Usage
 
-To run the benchmark, follow these steps:
+Keep in mind all parameters and configurations related to the project are stored in the `config.yaml` file.
 
-1. Define the keypoints for the track:
+1. Define the keypoints:
+   1.1 Define the keypoints from the digital graph, specify the `keypoints_definer.source_path` in the config.yaml file to the digital track image.
    ```bash
    drivenetbench define-keypoints --config-file config.yaml
    ```
 
-   > you will have to define the keypoints twice, once from the digital graph and from the your camera view.
+   commands for the `DefineKeyPoints` class:
+   1. press `z` to remove the last point.
+   2. press `q` to save the points and exit.
 
-   > ⚠️ Ensure that points order is the same
 
-   > you can run the `notebooks/calculate_transformation_error.ipynb` to check your view transformation.
+   1.2 Change the path of the `keypoints_definer.source_path` in the config.yaml to your source path. Then re-run the previous command.
 
+   > ⚠️ Ensure that points order is the same, otherwise the view transformation will not work correctly.
+
+   > you can run the `notebooks/calculate_transformation_error.ipynb` to check your view transformation. You will end up with a plot showing the transformation error. like the following:
+   ![Transformation Error](./assets/transformation_error.png)
+
+   Example of the keypoints definition:
+   3. Define the keypoints from the digital graph
+      ![Digital Graph](./assets/define-keypoints-track.png)
+   4. Define the keypoints from the camera view
+      ![Camera View](./assets/define-keypoints-camera.png)
+
+   > See how the keypoints orders are the same.
 
 2. Extract the track from the image:
    ```bash
    drivenetbench extract-track --config-file config.yaml
    ```
+
+   You will end up with:
+   - the track as npy file.
+   - the track drawn on the image, as shown below:
+     ![Track Image](./assets/new_track/annotated_track.jpg)
 
 3. Run the benchmark:
    ```bash
