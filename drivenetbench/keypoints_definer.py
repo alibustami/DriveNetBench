@@ -14,7 +14,7 @@ from drivenetbench.utilities.utils import path_checker
 
 
 class KeyPointsDefiner:
-    """Class for defining geometry on a video or image source."""
+    """Class for defining keypoints on a video or image source."""
 
     def __init__(
         self,
@@ -77,7 +77,7 @@ class KeyPointsDefiner:
         self.tk_image = None
 
     def run(self):
-        """Run the geometry definer application."""
+        """Run the keyponits definer application."""
         self.setup_window()
         frame = self.extract_frame()
         self.setup_canvas(frame)
@@ -87,7 +87,7 @@ class KeyPointsDefiner:
     def setup_window(self):
         """Set up the Tkinter window."""
         self.window = Tk()
-        self.window.title("Define Geometry")
+        self.window.title("Define KeyPoints")
 
     def extract_frame(self) -> npt.NDArray:
         """Extract a frame from the source.
