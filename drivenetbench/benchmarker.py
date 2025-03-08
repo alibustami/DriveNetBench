@@ -88,7 +88,6 @@ class BenchMarker:
         self.results_dir = os.path.join("results", self.experiment_name)
         if not os.path.exists(self.results_dir):
             os.makedirs(self.results_dir, exist_ok=True)
-            return
 
         RESULTS_COMPONENETS = [
             "results.toml",
