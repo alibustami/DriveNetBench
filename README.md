@@ -146,4 +146,9 @@ We welcome contributions to DriveNetBench! If you have any ideas, suggestions, o
 
 ## License
 
-DriveNetBench is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+DriveNetBench is licensed under the **GNU Affero General Public License v3 (AGPL-3.0)**.
+See the [LICENSE](LICENSE) file for more information.
+
+## Acknowledgments
+
+This project incorporates YOLOv11 trained via [Ultralytics](https://github.com/ultralytics/ultralytics), licensed under the [AGPL-3.0](https://github.com/ultralytics/ultralytics/blob/main/LICENSE) license.
