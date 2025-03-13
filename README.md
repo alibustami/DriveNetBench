@@ -2,8 +2,19 @@
 
 DriveNetBench is a comprehensive benchmarking repository for evaluating neural networks designed for autonomous driving control.
 
+![License](https://img.shields.io/badge/License-AGPL_v3-blue.svg) ![Python](https://img.shields.io/badge/python-3.8%2B-yellow.svg) ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?logo=pytorch&logoColor=white) ![Ultralytics](https://img.shields.io/badge/Ultralytics-YOLOv11-brightgreen.svg) ![Research](https://img.shields.io/badge/Research-Paper-orange.svg) ![Status](https://img.shields.io/badge/Status-Active-success.svg) ![University of Michigan](https://img.shields.io/badge/University%20of%20Michigan-00274C.svg?style=flat&color=00274C&labelColor=FFCB05)
+
+![GitHub stars](https://img.shields.io/github/stars/alibustami/DriveNetBench?style=social) ![GitHub issues](https://img.shields.io/github/issues/alibustami/DriveNetBench)
+
+
+
+
+<sub>An Affordable, Single-Camera Benchmarking System for Evaluating Autonomous Driving Networks with a modular approach to track, transform, and test your driving models.</sub>
+
 
 ![til](./assets/bench.gif)
+
+---
 
 ## Project Description
 
@@ -14,9 +25,46 @@ DriveNetBench is a benchmarking tool designed to evaluate the performance of neu
 - Extraction and processing of track images to define keypoints and paths.
 - Visualization of the robot's path and track.
 
+---
+## System Overview
+
+Below are three key figures from our DriveNetBench research paper that illustrate
+the overall workflow, the system architecture, and the supporting modules used in
+the benchmarking process.
+
+### Figure 1: DriveNetBench Workflow
+![Figure 1 – High-Level Workflow](./assets/DriveNetBench%20Diagram.png)
+
+*This figure shows an overview of the single-camera DriveNetBench workflow: A robot
+is recorded by an overhead camera, and DriveNetBench evaluates that footage using
+configurable settings and performance metrics (e.g., path similarity, completion time).*
+
+
+### Figure 2: DriveNetBench System Architecture
+![Figure 2 – System Architecture](./assets/architecture_diagram.png)
+
+*Here is the architecture that processes the camera feed, detects the robot, applies
+a perspective transform, and compares the resulting positions against a digital “track.”
+DriveNetBench reports path similarity and rotation time, with optional homography-error
+checks to ensure calibration.*
+
+
+### Figure 3: Supporting Modules
+![Figure 3 – Supporting Modules](./assets/supporting_modules.png)
+
+*This figure illustrates how DriveNetBench’s “TrackProcessor,” “KeyPointsDefiner,”
+“ViewTransformer,” and “Detector” all work together. The TrackProcessor extracts
+the centerline route from the digital track; the KeyPointsDefiner and ViewTransformer
+align camera-space coordinates with track-space coordinates; and the Detector identifies
+the robot’s position, enabling the path-comparison metrics.*
+
+---
+
 ## Requirements
 
 - Miniconda or Anaconda
+
+---
 
 ## Installation
 
@@ -43,6 +91,8 @@ To install DriveNetBench, follow these steps:
    python -m pip install -e .
    pre-commit install
    ```
+
+---
 
 ## Configuration
 
@@ -88,6 +138,8 @@ The `config.yaml` file contains the following parameters:
   - `actions.early_stop_after_x_seconds`: The number of seconds to wait before stopping the benchmark, leave empty to disable.
   - `actions.show_live`: A boolean value indicating whether to show the live video feed.
   - `actions.save_live_to_disk`: A boolean value indicating whether to save the live video feed to disk.
+
+---
 
 ## Usage
 
@@ -136,6 +188,8 @@ Keep in mind all parameters and configurations related to the project are stored
 
 The results of the benchmark will be saved in the `results` directory. The results include the time taken for the robot to complete a full rotation and the similarity percentage between the robot's path and the reference path.
 
+---
+
 ## Contributing
 
 We welcome contributions to DriveNetBench! If you have any ideas, suggestions, or bug reports, please open an issue on GitHub. If you would like to contribute code, please follow these guidelines:
@@ -144,10 +198,14 @@ We welcome contributions to DriveNetBench! If you have any ideas, suggestions, o
 2. Write tests for your changes and ensure that all tests pass.
 3. Submit a pull request with a clear description of your changes.
 
+---
+
 ## License
 
 DriveNetBench is licensed under the **GNU Affero General Public License v3 (AGPL-3.0)**.
 See the [LICENSE](LICENSE) file for more information.
+
+---
 
 ## Acknowledgments
 
